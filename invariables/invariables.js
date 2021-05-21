@@ -26,7 +26,7 @@ export const MainTheme = {
     colors: {
         primary: '#2B3B71',
         background: 'rgb(242, 242, 242)',
-        card: '#2B3B71',
+        card: '#CCB455',
         text: 'rgb(28, 28, 30)',
         border: 'rgb(199, 199, 204)',
         notification: 'rgb(255, 69, 58)',
@@ -44,6 +44,13 @@ export const AppTabTheme = {
         notification: 'rgb(255, 69, 58)',
     },
 }
+
+export const BtnTheme = {
+    colors: {
+        primary: '#CCB455',
+        text: 'rgb(242, 242, 242)',
+    },
+};
 
 export const getImage = (item) => {
     switch (item) {
@@ -65,6 +72,33 @@ export const getImage = (item) => {
             return require('../assets/Images/Image_10.png');
         default:
             return require('../assets/notFound.png');
+    }
+};
+
+export const fullInfo = (id) => {
+    switch (id) {
+        case '9780321856715':
+            return require('../assets/info/9780321856715.json');
+        case '9780321862969':
+            return require('../assets/info/9780321862969.json');
+        case '9781118841471':
+            return require('../assets/info/9781118841471.json');
+        case '9781430236054':
+            return require('../assets/info/9781430236054.json');
+        case '9781430237105':
+            return require('../assets/info/9781430237105.json');
+        case '9781430238072':
+            return require('../assets/info/9781430238072.json');
+        case '9781430245124':
+            return require('../assets/info/9781430245124.json');
+        case '9781430260226':
+            return require('../assets/info/9781430260226.json');
+        case '9781449308360':
+            return require('../assets/info/9781449308360.json');
+        case '9781449342753':
+            return require('../assets/info/9781449342753.json');
+        default:
+            return require('../assets/info/info.json');
     }
 };
 

@@ -2,10 +2,45 @@ import React from 'react';
 import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { MainTheme } from '../../../../invariables/invariables'
+import AddScreen from "./AddScreen";
 import About from "./About";
 import Books from "./Books";
+import Info from "./Info";
+
+const Stack = createStackNavigator();
+
+const stackOfScreens = () => {
+    return(
+        <Stack.Navigator initialRouteName="Books">
+            <Stack.Screen
+                name="Books"
+                component={Books}
+                options={{
+                    headerShown: false,
+                    tabBarLabel: 'Books',
+                    tabBarIcon: () => (
+                        <View>
+                            <Icon
+                                name={'film'}
+                            />
+                        </View>
+                    ),
+                }}
+            />
+            <Stack.Screen
+                name="Info"
+                component={Info}
+            />
+            <Stack.Screen
+                name="AddThere"
+                component={AddScreen}
+            />
+        </Stack.Navigator>
+    )
+}
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -18,7 +53,7 @@ const RootNavigator = () => {
                 initialRouteName="Creator"
             >
                 <Tab.Screen
-                    name="lab1"
+                    name="Lab1"
                     component={About}
                     options={{
                         tabBarLabel: 'Lab1',
@@ -35,8 +70,7 @@ const RootNavigator = () => {
                 />
 
                 <Tab.Screen
-                    name="Lab3"
-                    component={Books}
+                    name='Lab3'
                     options={{
                         tabBarLabel: 'Lab3',
                         tabBarIcon: () => (
@@ -49,6 +83,7 @@ const RootNavigator = () => {
                             </View>
                         ),
                     }}
+                    component={stackOfScreens}
                 />
             </Tab.Navigator>
         </NavigationContainer>
