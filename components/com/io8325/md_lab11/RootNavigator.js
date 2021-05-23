@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { MainTheme } from '../../../../invariables/invariables'
 import AddScreen from "./AddScreen";
+import ImagesBox from "./ImagesBox";
 import About from "./About";
 import Books from "./Books";
 import Info from "./Info";
@@ -53,7 +54,7 @@ const RootNavigator = () => {
                 initialRouteName="Creator"
             >
                 <Tab.Screen
-                    name="Lab1"
+                    name="About"
                     component={About}
                     options={{
                         tabBarLabel: 'Lab1',
@@ -84,6 +85,22 @@ const RootNavigator = () => {
                         ),
                     }}
                     component={stackOfScreens}
+                />
+                <Tab.Screen
+                    name="ImagesBox"
+                    component={ImagesBox}
+                    options={{
+                        tabBarLabel: 'Lab5',
+                        tabBarIcon: () => (
+                            <View>
+                                <Icon
+                                    style={[{color: '#F9F3E7'}]}
+                                    size={25}
+                                    name={'th'}
+                                />
+                            </View>
+                        ),
+                    }}
                 />
             </Tab.Navigator>
         </NavigationContainer>
