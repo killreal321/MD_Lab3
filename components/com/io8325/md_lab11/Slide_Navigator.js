@@ -5,11 +5,11 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { MainTheme } from '../../../../invariables/invariables'
-import AddScreen from "./AddScreen";
-import ImagesBox from "./ImagesBox";
+import Info_add from "./Info_add";
+import Window_images from "./Window_images";
 import About from "./About";
 import Books from "./Books";
-import Info from "./Info";
+import Info from "./Window_info";
 
 const Stack = createStackNavigator();
 
@@ -37,7 +37,7 @@ const stackOfScreens = () => {
             />
             <Stack.Screen
                 name="AddThere"
-                component={AddScreen}
+                component={Info_add}
             />
         </Stack.Navigator>
     )
@@ -45,7 +45,7 @@ const stackOfScreens = () => {
 
 const Tab = createMaterialBottomTabNavigator();
 
-const RootNavigator = () => {
+const Slide_Navigator = () => {
     return (
         <NavigationContainer theme={MainTheme}>
             <Tab.Navigator
@@ -69,9 +69,8 @@ const RootNavigator = () => {
                         ),
                     }}
                 />
-
                 <Tab.Screen
-                    name='Lab3'
+                    name='Books'
                     options={{
                         tabBarLabel: 'Lab3',
                         tabBarIcon: () => (
@@ -88,7 +87,7 @@ const RootNavigator = () => {
                 />
                 <Tab.Screen
                     name="ImagesBox"
-                    component={ImagesBox}
+                    component={Window_images}
                     options={{
                         tabBarLabel: 'Lab5',
                         tabBarIcon: () => (
@@ -106,4 +105,4 @@ const RootNavigator = () => {
         </NavigationContainer>
     );
 }
-export default RootNavigator
+export default Slide_Navigator

@@ -4,7 +4,7 @@ import { BtnTheme } from "../../../../invariables/invariables";
 import { Button } from "react-native-elements";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 
-const AddScreen = ({ navigation, route }) => {
+const Info_add = ({ navigation, route }) => {
 
     const { bookList } = route.params;
     const { setBookList } = route.params;
@@ -20,17 +20,17 @@ const AddScreen = ({ navigation, route }) => {
             let Idx = 50
 
             if (title === '') {
-                setTitle('Title empty!')
+                setTitle('Title empty')
                 setTimeout(() => {
                     setTitle('')
                 }, 2000);
             } else if (subtitle === '') {
-                setSubtitle('Subtitle empty!')
+                setSubtitle('Subtitle empty')
                 setTimeout(() => {
                     setSubtitle('')
                 }, 2000);
             } else if (isNaN(parsed)) {
-                setPrice('Price empty!')
+                setPrice('must be a number')
                 setTimeout(() => {
                     setPrice('')
                 }, 2000);
@@ -138,4 +138,4 @@ const AddScreen = ({ navigation, route }) => {
     )
 }
 
-export default AddScreen
+export default Info_add

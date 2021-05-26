@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 const ImagesMagic = ({ imagesData, width, height}) => {
 
     const normalImageSize = {
-        width: width ,
+        width: width,
         height: height
     }
 
@@ -49,11 +49,11 @@ const ImagesMagic = ({ imagesData, width, height}) => {
                 {imagesData[2] && ImageOf(imagesData[2])}
             </View>
             <View style={styles.centralBlock}>
-            <View style={styles.centralBlockColumn}>
-                {imagesData[3] && ImageOf(imagesData[3])}
-            {imagesData[5] && ImageOf(imagesData[4])}
-            </View>
-            {imagesData[4] && ImageOf(imagesData[0], tripleImageSize)}
+                <View style={styles.centralBlockColumn}>
+                    {imagesData[3] && ImageOf(imagesData[3])}
+                    {imagesData[5] && ImageOf(imagesData[4])}
+                </View>
+                {imagesData[4] && ImageOf(imagesData[0], tripleImageSize)}
             </View>
             <View style={styles.smallImageContainer}>
                 {/*{imagesData[6] && ImageOf(imagesData[5])}*/}

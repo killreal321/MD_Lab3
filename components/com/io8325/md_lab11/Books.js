@@ -1,17 +1,16 @@
 import React from "react";
 import {View, Text, ScrollView, Image, Dimensions, TouchableHighlight, TouchableOpacity} from 'react-native'
 import { Appbar } from 'react-native-paper';
-import BooksList from '../../../../assets/BooksList.json'
 import { useScreenDimensions, AppTabTheme, getImage } from '../../../../invariables/invariables'
 import SearchBar from "react-native-dynamic-search-bar";
 import Icon from 'react-native-vector-icons/FontAwesome'
-
-let books = [];
-BooksList.books.map( item => (books.push(item)) )
+import * as Network from 'expo-network';
+import { useSelector, useDispatch } from 'react-redux';
+import { addBook } from '../../../../bd/actions';
 
 const Books = ({ navigation }) => {
 
-    const [bookList, setBookList] = React.useState(books)
+    const [bookList, setBookList] = React.useState([])
     const [searchRes, setSearchRes] = React.useState('')
 
     const screenData = useScreenDimensions();
@@ -42,25 +41,56 @@ const Books = ({ navigation }) => {
 
     const visibleItems = filterBooks(bookList, searchRes)
 
+    const getClearedDataArray = (arr, key) => {
+        return [...new Map(arr.map(item => [item[key], item])).values()]
+    }
+
+    const UpdatedDataOfBooks = async (text) => {
+
+        let BooksArrayFromData = []
+
+        const formattedTXT = text
+            .toLowerCase()
+            .replace(/[^a-zA-Z ]/g, "")
+            .replace(/\s+/g, ' ')
+            .trim()
+            .replace(/,/g, '')
+
+        setSearchRes(formattedTXT)
+
+        if( formattedTXT.length <= 2) {
+            return null
+        } else if ( formattedTXT.length >= 2 ) {
+            let url = `https://api.itbook.store/1.0/search/${formattedTXT}`
+            const fetchResult = await fetch(url);
+            const loadedData = await fetchResult.json();
+            BooksArrayFromData = [
+                ...filterBooks(bookList, formattedTXT),
+                ...loadedData.books
+            ]
+        }
+        setBookList(
+            getClearedDataArray(
+                [...BooksArrayFromData, ...bookList],
+                'isbn13'
+            )
+        )
+    }
+
     return (
-        <ScrollView style={{ backgroundColor: '#eee'}}>
+        <ScrollView style={{ backgroundColor: '#ccc'}}>
             <View>
                 <Appbar.Header theme={ AppTabTheme }>
                     <Appbar.Action
                         icon="home"
                     />
                     <SearchBar
-                        style={{ backgroundColor: '#eee', flex: 1}}
+                        style={{ backgroundColor: '#fff', flex: 1}}
                         placeholder="Search"
                         onClearPress={() => {setSearchRes('')}}
-                        onChangeText={(text) =>
-                            setSearchRes(
-                                text.toLowerCase()
-                                    .replace(/[^a-zA-Z ]/g, "")
-                                    .replace(/\s+/g, ' ')
-                                    .trim()
-                                    .replace(/,/g, '')
-                            )}
+                        onChangeText={
+                            (text) => UpdatedDataOfBooks(text)
+                        }
                     />
                     <Appbar.Action
                         icon="plus"
@@ -75,6 +105,17 @@ const Books = ({ navigation }) => {
             </View>
             <View>
                 {
+                    searchRes.length < 3 ?
+                        <View style={{
+                            height: Dimensions.get('screen').height - 200,
+                            paddingTop: screenData.isLandscape ? '15%' : '65%',
+                            flexDirection:'column',
+                            alignItems:'center'
+                        }}>
+                            <Text style={{fontSize: 20}}>
+                                Search books
+                            </Text>
+                        </View> :
                     visibleItems.length === 0 ?
                         <View style={{
                             height: Dimensions.get('screen').height,
@@ -87,6 +128,7 @@ const Books = ({ navigation }) => {
                             </Text>
                         </View> :
                     visibleItems.map(( item, index) => {
+                        console.log(item.image)
                         return(
                             <View key={ index }>
                                 <TouchableOpacity
@@ -97,19 +139,21 @@ const Books = ({ navigation }) => {
                                     }}
                                 >
                                     <View style={{
-                                        backgroundColor: '#FFFFFF',
+                                        backgroundColor: '#fff',
                                         borderRadius: 0,
                                         flexDirection: 'row',
-                                        marginTop: 2,
+                                        margin: 1,
                                     }}>
                                         <View>
                                             <Image
                                                 resizeMode="cover"
                                                 source={
-                                                    getImage(item.image)
+                                                    item.image === 'N/A' ?
+                                                        require('../../../../assets/notFound.png'):
+                                                    {uri: item.image}
                                                 }
                                                 style={{
-                                                    borderRadius: 0,
+                                                    borderRadius: 30,
                                                     height: 200,
                                                     width: 150
                                                 }}
@@ -168,7 +212,7 @@ const Books = ({ navigation }) => {
                                                 width: screenData.isLandscape ? '10%' : '12%',
                                                 height: '22%',
                                                 borderRadius: screenData.isLandscape ? 25 : 30,
-                                                backgroundColor: '#FFFFFF'
+                                                backgroundColor: '#fff'
                                             }}
                                             onPress={() => { deleteBook(item.isbn13) }}>
                                             <View>

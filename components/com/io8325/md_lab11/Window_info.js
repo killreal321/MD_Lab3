@@ -1,20 +1,43 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     View, Text,
     StyleSheet, Dimensions, ScrollView, TouchableHighlight, Image
 } from 'react-native'
 import { getImage, fullInfo } from "../../../../invariables/invariables";
+import * as Network from 'expo-network';
+import { useDispatch, useSelector } from "react-redux";
+import { addFullInfo } from "../../../../bd/actions";
+import { useScreenDimensions } from '../../../../invariables/invariables'
 
 const BookInfo = ({ route }) => {
 
     const { Id } = route.params;
 
-    let fullInfoAboutBook = []
+    const [fullDataInfo, setFullDataInfo] = useState([])
 
-    fullInfoAboutBook.push(fullInfo(Id))
+    useEffect(() => {
+        let cleanupFunction = false;
+        const fetchData = async () => {
+            try {
+                fetch(`https://api.itbook.store/1.0/books/${Id}`)
+                    .then(response => response.json() )
+                    .then( data => setFullDataInfo([data]))
+
+                if(!cleanupFunction) {
+                    setFullDataInfo([]);
+                }
+            } catch (e) {
+                console.error(e.message)
+            }
+        };
+
+        fetchData();
+
+        return () => cleanupFunction = true;
+    }, []);
 
     return (
-        <ScrollView style={{backgroundColor: '#FFFFFF'}}>
+        <ScrollView style={{backgroundColor: '#f8ecdd'}}>
             <View>
                 <View style={{
                     flex: 0,
@@ -22,7 +45,7 @@ const BookInfo = ({ route }) => {
                     justifyContent: 'center'
                 }}>
                     {
-                        fullInfoAboutBook.map((item, index) => {
+                        fullDataInfo.map((item, index) => {
                             return (
                                 <View key={index}>
                                     <View style={orientation().mainTopContainer}>
@@ -30,7 +53,9 @@ const BookInfo = ({ route }) => {
                                             <Image
                                                 resizeMode="cover"
                                                 source={
-                                                    getImage(item.image)
+                                                    item.image === 'N/A' ?
+                                                        require('../../../../assets/notFound.png'):
+                                                        {uri: item.image}
                                                 }
                                                 style={orientation().img}
                                             />
